@@ -18,6 +18,9 @@ public class PeakShelterService {
     }
 
     public PeakShelter createShelter(PeakShelter shelter) {
+        if (repository.existsByNameAndRegion(shelter.getName(), shelter.getRegion())) {
+            throw new IllegalArgumentException("Ya existe un refugio o pico con el nombre '" + shelter.getName() + "' en la región '" + shelter.getRegion() + "'.");
+        }
         return repository.save(shelter);
     }
 
