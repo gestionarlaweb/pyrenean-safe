@@ -3,10 +3,14 @@
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/config/JwtAuthenticationFilter.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/config/SecurityConfig.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/controller/AuthController.java
+/home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/controller/PeakShelterController.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/dto/AuthenticationRequest.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/dto/AuthenticationResponse.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/dto/RegisterRequest.java
+/home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/model/PeakShelter.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/model/User.java
+/home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/repository/PeakShelterRepository.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/repository/UserRepository.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/service/AuthService.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/service/JwtService.java
+/home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/service/PeakShelterService.java
