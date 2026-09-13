@@ -7,6 +7,7 @@
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/dto/AuthenticationRequest.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/dto/AuthenticationResponse.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/dto/RegisterRequest.java
+/home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/exception/GlobalExceptionHandler.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/model/PeakShelter.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/model/User.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/repository/PeakShelterRepository.java

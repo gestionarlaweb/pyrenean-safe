@@ -2,6 +2,8 @@ package com.simplecraft.pyreneansafe.controller;
 
 import com.simplecraft.pyreneansafe.model.PeakShelter;
 import com.simplecraft.pyreneansafe.service.PeakShelterService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +30,16 @@ public class PeakShelterController {
     @GetMapping("/region/{region}")
     public ResponseEntity<List<PeakShelter>> getByRegion(@PathVariable String region) {
         return ResponseEntity.ok(service.getSheltersByRegion(region));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PeakShelter> updateShelter(@PathVariable Long id, @Valid @RequestBody PeakShelter shelter) {
+        return ResponseEntity.ok(service.updateShelter(id, shelter));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteShelter(@PathVariable Long id) {
+        service.deleteShelter(id);
+        return ResponseEntity.noContent().build();
     }
 }
