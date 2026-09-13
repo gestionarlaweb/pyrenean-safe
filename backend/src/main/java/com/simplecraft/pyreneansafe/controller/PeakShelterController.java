@@ -18,12 +18,14 @@ public class PeakShelterController {
     private final PeakShelterService service;
 
     @GetMapping
-    public ResponseEntity<List<PeakShelter>> getAllShelters() {
-        return ResponseEntity.ok(service.getAllShelters());
+    public ResponseEntity<List<PeakShelter>> getShelters(
+            @RequestParam(required = false) String region,
+            @RequestParam(required = false) String type) {
+        return ResponseEntity.ok(service.filterShelters(region, type));
     }
 
     @PostMapping
-    public ResponseEntity<PeakShelter> createShelter(@RequestBody PeakShelter shelter) {
+    public ResponseEntity<PeakShelter> createShelter(@Valid @RequestBody PeakShelter shelter) {
         return ResponseEntity.ok(service.createShelter(shelter));
     }
 

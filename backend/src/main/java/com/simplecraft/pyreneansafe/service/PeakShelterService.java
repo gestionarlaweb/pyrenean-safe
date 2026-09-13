@@ -13,6 +13,17 @@ public class PeakShelterService {
 
     private final PeakShelterRepository repository;
 
+    public List<PeakShelter> filterShelters(String region, String type) {
+        if (region != null && !region.isBlank() && type != null) {
+            return repository.findByRegionAndType(region, PeakShelter.FacilityType.valueOf(type));
+        } else if (region != null && !region.isBlank() && type != null && !type.isBlank()) {
+            return repository.findByRegion(region);
+        } else if (type != null && !type.isBlank()) {
+            return repository.findByType(PeakShelter.FacilityType.valueOf(type));
+        }
+        return repository.findAll();
+    }
+
     public List<PeakShelter> getAllShelters() {
         return repository.findAll();
     }
