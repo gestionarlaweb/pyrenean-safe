@@ -18,6 +18,7 @@ com/simplecraft/pyreneansafe/service/JwtService.class
 com/simplecraft/pyreneansafe/dto/RegisterRequest$RegisterRequestBuilder.class
 com/simplecraft/pyreneansafe/dto/AuthenticationRequest.class
 com/simplecraft/pyreneansafe/dto/AuthenticationResponse$AuthenticationResponseBuilder.class
+com/simplecraft/pyreneansafe/config/DataInitializer.class
 com/simplecraft/pyreneansafe/repository/UserRepository.class
 com/simplecraft/pyreneansafe/controller/AuthController.class
 com/simplecraft/pyreneansafe/model/User$Role.class

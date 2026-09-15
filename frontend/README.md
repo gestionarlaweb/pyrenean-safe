@@ -19,3 +19,9 @@ Para permitir que la aplicación web (Frontend en Vue.js) pueda listar y filtrar
 
 * **Lectura (`GET`):** Los endpoints de consulta para picos y refugios (`/api/v1/shelters/**`) son **públicos** (`permitAll()`).
 * **Mutaciones (`POST`, `PUT`, `DELETE`):** La creación, actualización y eliminación de registros siguen estando **protegidas** y requieren un token JWT válido (`authenticated()`).
+
+
+## Inicialización de Datos
+El proyecto incluye un inicializador automático (`DataInitializer.java`) que comprueba al arrancar si la base de datos está vacía (`repository.count() == 0`). 
+- Si no hay registros, inserta automáticamente una lista inicial con 10 picos y refugios icónicos de los Pirineos con sus respectivas coordenadas y tipos.
+- Si ya existen registros, respeta los datos actuales y arranca con normalidad sin duplicar información.
