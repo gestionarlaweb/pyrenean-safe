@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/shelters")
+@CrossOrigin(origins = "http://localhost:5173") // <-- Añade esto para permitir solicitudes desde el frontend Vue.js
 @RequiredArgsConstructor
 public class PeakShelterController {
 

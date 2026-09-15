@@ -1,0 +1,331 @@
+{
+    "schema_version": 1,
+    "diagram_type": "architecture",
+    "meta": {
+        "title": "PyreneanSafe backend architecture",
+        "output": "pyrenean-safe-backend.html",
+        "quality_profile": "showcase",
+        "views": [
+            {
+                "id": "request-flow",
+                "label": "API request flow",
+                "focus": [
+                    "users",
+                    "frontend",
+                    "api",
+                    "auth-controller",
+                    "peak-controller",
+                    "auth-service",
+                    "shelter-service",
+                    "db"
+                ],
+                "note": "Main request path from the client to the protected backend and database."
+            },
+            {
+                "id": "security-layer",
+                "label": "Authentication and JWT",
+                "focus": [
+                    "frontend",
+                    "auth-controller",
+                    "auth-service",
+                    "jwt-security",
+                    "user-repository",
+                    "db"
+                ],
+                "note": "The security layer validates credentials and authorizes each request using JWT tokens."
+            }
+        ],
+        "viewBox": [
+            2000,
+            760
+        ]
+    },
+    "components": [
+        {
+            "id": "users",
+            "type": "external",
+            "label": "Users",
+            "pos": [
+                40,
+                260
+            ],
+            "size": [
+                120,
+                60
+            ]
+        },
+        {
+            "id": "frontend",
+            "type": "frontend",
+            "label": "Frontend App",
+            "sublabel": "Web UI",
+            "pos": [
+                250,
+                260
+            ],
+            "size": [
+                150,
+                64
+            ]
+        },
+        {
+            "id": "api",
+            "type": "backend",
+            "label": "PyreneanSafe API",
+            "sublabel": "Spring Boot 3",
+            "pos": [
+                560,
+                260
+            ],
+            "size": [
+                200,
+                72
+            ]
+        },
+        {
+            "id": "auth-controller",
+            "type": "backend",
+            "label": "AuthController",
+            "sublabel": "/api/v1/auth",
+            "pos": [
+                260,
+                120
+            ],
+            "size": [
+                170,
+                60
+            ]
+        },
+        {
+            "id": "peak-controller",
+            "type": "backend",
+            "label": "PeakShelterController",
+            "sublabel": "/api/v1/shelters",
+            "pos": [
+                260,
+                440
+            ],
+            "size": [
+                210,
+                62
+            ]
+        },
+        {
+            "id": "auth-service",
+            "type": "backend",
+            "label": "AuthService",
+            "sublabel": "register + auth",
+            "pos": [
+                820,
+                120
+            ],
+            "size": [
+                180,
+                64
+            ]
+        },
+        {
+            "id": "shelter-service",
+            "type": "backend",
+            "label": "PeakShelterService",
+            "sublabel": "filter / CRUD",
+            "pos": [
+                820,
+                440
+            ],
+            "size": [
+                220,
+                64
+            ]
+        },
+        {
+            "id": "user-repository",
+            "type": "backend",
+            "label": "UserRepository",
+            "sublabel": "JPA",
+            "pos": [
+                1170,
+                120
+            ],
+            "size": [
+                180,
+                60
+            ]
+        },
+        {
+            "id": "shelter-repository",
+            "type": "backend",
+            "label": "PeakShelterRepository",
+            "sublabel": "JPA",
+            "pos": [
+                1170,
+                440
+            ],
+            "size": [
+                220,
+                60
+            ]
+        },
+        {
+            "id": "jwt-security",
+            "type": "security",
+            "label": "SecurityConfig + JWT",
+            "sublabel": "Bearer auth",
+            "pos": [
+                1500,
+                260
+            ],
+            "size": [
+                220,
+                72
+            ]
+        },
+        {
+            "id": "db",
+            "type": "database",
+            "label": "PostgreSQL",
+            "sublabel": "mountain_db",
+            "pos": [
+                1800,
+                260
+            ],
+            "size": [
+                180,
+                70
+            ]
+        }
+    ],
+    "connections": [
+        {
+            "id": "users-to-frontend",
+            "from": "users",
+            "to": "frontend",
+            "label": "HTTPS"
+        },
+        {
+            "id": "frontend-to-api",
+            "from": "frontend",
+            "to": "api",
+            "label": "REST API",
+            "labelAt": [
+                430,
+                300
+            ]
+        },
+        {
+            "id": "api-to-auth-controller",
+            "from": "api",
+            "to": "auth-controller",
+            "label": "auth routes",
+            "labelAt": [
+                470,
+                250
+            ]
+        },
+        {
+            "id": "api-to-shelter-controller",
+            "from": "api",
+            "to": "peak-controller",
+            "label": "shelter routes"
+        },
+        {
+            "id": "auth-controller-to-auth-service",
+            "from": "auth-controller",
+            "to": "auth-service",
+            "label": "register / auth"
+        },
+        {
+            "id": "peak-controller-to-shelter-service",
+            "from": "peak-controller",
+            "to": "shelter-service",
+            "label": "CRUD / filter"
+        },
+        {
+            "id": "auth-service-to-jwt",
+            "from": "auth-service",
+            "to": "jwt-security",
+            "label": "generate JWT",
+            "labelAt": [
+                1080,
+                240
+            ],
+            "variant": "security"
+        },
+        {
+            "id": "shelter-service-to-jwt",
+            "from": "shelter-service",
+            "to": "jwt-security",
+            "label": "authorize request",
+            "labelAt": [
+                1080,
+                480
+            ],
+            "variant": "security"
+        },
+        {
+            "id": "auth-service-to-user-repo",
+            "from": "auth-service",
+            "to": "user-repository",
+            "label": "user persistence"
+        },
+        {
+            "id": "shelter-service-to-shelter-repo",
+            "from": "shelter-service",
+            "to": "shelter-repository",
+            "label": "shelter persistence",
+            "labelAt": [
+                1120,
+                500
+            ]
+        },
+        {
+            "id": "user-repo-to-db",
+            "from": "user-repository",
+            "to": "db",
+            "label": "users table"
+        },
+        {
+            "id": "shelter-repo-to-db",
+            "from": "shelter-repository",
+            "to": "db",
+            "label": "peak_shelters table"
+        },
+        {
+            "id": "jwt-to-api",
+            "from": "jwt-security",
+            "to": "api",
+            "label": "token validation",
+            "labelAt": [
+                1180,
+                300
+            ],
+            "variant": "security"
+        }
+    ],
+    "cards": [
+        {
+            "dot": "cyan",
+            "title": "API surface",
+            "items": [
+                "AuthController exposes /api/v1/auth/register and /authenticate",
+                "PeakShelterController exposes shelter discovery and CRUD operations"
+            ]
+        },
+        {
+            "dot": "emerald",
+            "title": "Business logic",
+            "items": [
+                "AuthService handles registration, authentication and JWT issuance",
+                "PeakShelterService filters and persists shelter data"
+            ]
+        },
+        {
+            "dot": "rose",
+            "title": "Security and persistence",
+            "items": [
+                "SecurityConfig enforces JWT authentication and stateless sessions",
+                "UserRepository and PeakShelterRepository persist data to PostgreSQL"
+            ]
+        }
+    ]
+}
