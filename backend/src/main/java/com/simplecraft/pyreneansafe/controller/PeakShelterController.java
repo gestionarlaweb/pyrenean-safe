@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @RestController
 @RequestMapping("/api/v1/shelters")
 @CrossOrigin(origins = "http://localhost:5173") // <-- Añade esto para permitir solicitudes desde el frontend Vue.js
@@ -26,6 +28,7 @@ public class PeakShelterController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PeakShelter> createShelter(@Valid @RequestBody PeakShelter shelter) {
         return ResponseEntity.ok(service.createShelter(shelter));
     }
@@ -36,11 +39,13 @@ public class PeakShelterController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PeakShelter> updateShelter(@PathVariable Long id, @Valid @RequestBody PeakShelter shelter) {
         return ResponseEntity.ok(service.updateShelter(id, shelter));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteShelter(@PathVariable Long id) {
         service.deleteShelter(id);
         return ResponseEntity.noContent().build();

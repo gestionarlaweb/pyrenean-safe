@@ -12,7 +12,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.http.HttpMethod;
 
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -25,9 +28,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll() // Rutas de login/registro públicas
-                        .requestMatchers(HttpMethod.GET, "/api/v1/shelters/**").permitAll() // <-- ¡Permitir ver refugios/picos a todo el mundo!
-                        .anyRequest().authenticated() // El resto (POST, PUT, DELETE) sigue pidiendo token
+                        .requestMatchers("/api/v1/auth/**").permitAll() // Login / Registro público
+                .requestMatchers(HttpMethod.GET, "/api/v1/shelters/**").permitAll() // Lectura pública de picos y refugios
+                .anyRequest().authenticated() // Todo lo demás exige estar autenticado
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
