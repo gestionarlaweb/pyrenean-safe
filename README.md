@@ -91,6 +91,6 @@ Desarrollado por David (gestionarlaweb@gmail.com).
 
 ## 📸 Vista Previa de la Aplicación
 
-![Pyrenean Safe Interface](assets/screenshot.png)
+![Pyrenean Safe Interface]('assets/screenshot.png')
 
 > **NOTA:** No me petéis el backend, sed respetuosos para que otros usuarios puedan probarlo, ¡gracias! 🙏
