@@ -88,3 +88,9 @@ NOTA: No me peteis el backend, ser respectuosos para que otros usuarios puedan p
 
 ## 👤 Autor
 Desarrollado por David (gestionarlaweb@gmail.com).
+
+## 📸 Vista Previa de la Aplicación
+
+![Pyrenean Safe Interface](<img width="1113" height="872" alt="Image" src="https://github.com/user-attachments/assets/accded75-8989-4112-81ff-b99087d9c257" />)
+
+> **NOTA:** No me petéis el backend, sed respetuosos para que otros usuarios puedan probarlo, ¡gracias! 🙏
