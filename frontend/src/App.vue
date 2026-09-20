@@ -1,202 +1,113 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { shelterService } from './services/shelterService';
 import authService from './services/authService';
+import LoginModal from './components/LoginModal.vue';
+import ShelterForm from './components/ShelterForm.vue';
+import ShelterList from './components/ShelterList.vue';
 
-// Estados reactivos
 const shelters = ref([]);
-const username = ref('');
-const password = ref('');
-const loggedIn = ref(authService.isLoggedIn());
-const errorMessage = ref('');
+const isLoggedIn = ref(authService.isLoggedIn());
+const shelterToEdit = ref(null);
+const feedback = ref({ message: '', type: 'success' });
 
-// Campos para el formulario (Crear / Editar)
-const editingId = ref(null); // Si tiene valor, estamos editando
-const newName = ref('');
-const newType = ref('SHELTER');
-const newRegion = ref('');
-const newElevation = ref('');
-const newLatitude = ref('');
-const newLongitude = ref('');
-const successMessage = ref('');
-
-// Cargar refugios (GET público)
-const fetchShelters = async () => {
+const loadShelters = async () => {
   try {
-    const response = await fetch('http://localhost:8080/api/v1/shelters');
-    shelters.value = await response.json();
-  } catch (error) {
-    console.error('Error al cargar refugios:', error);
+    shelters.value = await shelterService.getAll();
+  } catch (err) {
+    showFeedback(err.message, 'error');
   }
 };
 
-// Iniciar sesión
-const handleLogin = async () => {
+const handleSaveShelter = async (formData) => {
   try {
-    errorMessage.value = '';
-    await authService.login(username.value, password.value);
-    loggedIn.value = true;
-    username.value = '';
-    password.value = '';
-  } catch (error) {
-    errorMessage.value = 'Usuario o contraseña incorrectos';
+    const token = authService.getToken();
+    if (shelterToEdit.value) {
+      await shelterService.update(shelterToEdit.value.id, formData, token);
+      showFeedback('¡Registro actualizado correctamente!');
+    } else {
+      await shelterService.create(formData, token);
+      showFeedback('¡Nuevo refugio/pico creado con éxito!');
+    }
+    shelterToEdit.value = null;
+    loadShelters();
+  } catch (err) {
+    showFeedback(err.message, 'error');
   }
 };
 
-// Cerrar sesión
+const handleDeleteShelter = async (id) => {
+  if (!confirm('¿Estás seguro de eliminar este registro permanentemente?')) return;
+  try {
+    const token = authService.getToken();
+    await shelterService.delete(id, token);
+    showFeedback('Registro eliminado con éxito');
+    loadShelters();
+  } catch (err) {
+    showFeedback(err.message, 'error');
+  }
+};
+
 const handleLogout = () => {
   authService.logout();
-  loggedIn.value = false;
-  cancelEdit();
+  isLoggedIn.value = false;
+  shelterToEdit.value = null;
+  showFeedback('Sesión cerrada correctamente');
 };
 
-// Guardar o Actualizar Refugio (POST o PUT)
-const handleSubmitShelter = async () => {
-  try {
-    successMessage.value = '';
-    const token = authService.getToken();
-    const url = editingId.value 
-      ? `http://localhost:8080/api/v1/shelters/${editingId.value}`
-      : 'http://localhost:8080/api/v1/shelters';
-    
-    const method = editingId.value ? 'PUT' : 'POST';
-
-    const response = await fetch(url, {
-      method: method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        name: newName.value,
-        type: newType.value,
-        region: newRegion.value,
-        elevation: Number(newElevation.value),
-        latitude: Number(newLatitude.value),
-        longitude: Number(newLongitude.value)
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Error al procesar la operación (¿falta de permisos?)');
-    }
-
-    successMessage.value = editingId.value ? '¡Registro actualizado con éxito!' : '¡Refugio/Pico creado con éxito!';
-    
-    cancelEdit();
-    fetchShelters();
-  } catch (error) {
-    alert(error.message);
-  }
-};
-
-// Preparar formulario para Editar
-const startEdit = (shelter) => {
-  editingId.value = shelter.id;
-  newName.value = shelter.name;
-  newType.value = shelter.type;
-  newRegion.value = shelter.region;
-  newElevation.value = shelter.elevation;
-  newLatitude.value = shelter.latitude;
-  newLongitude.value = shelter.longitude;
-};
-
-// Cancelar edición
-const cancelEdit = () => {
-  editingId.value = null;
-  newName.value = '';
-  newType.value = 'SHELTER';
-  newRegion.value = '';
-  newElevation.value = '';
-  newLatitude.value = '';
-  newLongitude.value = '';
-};
-
-// Eliminar refugio (DELETE protegido con Token JWT)
-const handleDelete = async (id) => {
-  if (!confirm('¿Estás seguro de que deseas eliminar este registro?')) return;
-
-  try {
-    const token = authService.getToken();
-    const response = await fetch(`http://localhost:8080/api/v1/shelters/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error('Error al eliminar el registro');
-    }
-
-    fetchShelters();
-  } catch (error) {
-    alert(error.message);
-  }
+const showFeedback = (msg, type = 'success') => {
+  feedback.value = { message: msg, type };
+  setTimeout(() => { feedback.value.message = ''; }, 4000);
 };
 
 onMounted(() => {
-  fetchShelters();
+  loadShelters();
 });
 </script>
 
 <template>
-  <div style="font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px;">
-    <h1>Pyrenean Safe 🏔️</h1>
-
-    <!-- Sección de Autenticación -->
-    <div style="background: #f4f4f4; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
-      <div v-if="!loggedIn">
-        <h3>Iniciar Sesión (Admin)</h3>
-        <form @submit.prevent="handleLogin">
-          <input v-model="username" placeholder="Usuario (ej. admin)" required style="margin-right: 10px; padding: 5px;" />
-          <input v-model="password" type="password" placeholder="Contraseña" required style="margin-right: 10px; padding: 5px;" />
-          <button type="submit" style="padding: 5px 10px;">Entrar</button>
-        </form>
-        <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+  <div style="max-width: 1100px; margin: 0 auto; padding: 40px 20px;">
+    <!-- Cabecera Hero -->
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 20px;">
+      <div>
+        <h1 style="margin: 0; font-size: 2.2rem; font-weight: 800; background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          Pyrenean Safe 🏔️
+        </h1>
+        <p style="margin: 6px 0 0 0; color: #94a3b8; font-size: 0.95rem;">
+          Gestión inteligente de refugios y picos del Pirineo
+        </p>
       </div>
-      <div v-else>
-        <p>🟢 <strong>Sesión iniciada como Administrador</strong></p>
-        <button @click="handleLogout" style="padding: 5px 10px; background: #ff4d4d; color: white; border: none; border-radius: 4px;">Cerrar Sesión</button>
-        
-        <!-- Formulario protegido para Crear o Editar -->
-        <div style="margin-top: 15px; background: #e2e8f0; padding: 15px; border-radius: 6px;">
-          <h4>{{ editingId ? 'Editar Registro (ID: ' + editingId + ')' : 'Añadir Nuevo Refugio o Pico (Solo Admin)' }}</h4>
-          <form @submit.prevent="handleSubmitShelter">
-            <input v-model="newName" placeholder="Nombre" required style="margin: 5px; padding: 5px;" />
-            <select v-model="newType" style="margin: 5px; padding: 5px;">
-              <option value="SHELTER">Refugio</option>
-              <option value="PEAK">Pico</option>
-            </select>
-            <input v-model="newRegion" placeholder="Región" required style="margin: 5px; padding: 5px;" />
-            <input v-model="newElevation" type="number" placeholder="Elevación (m)" required style="margin: 5px; padding: 5px;" />
-            <input v-model="newLatitude" type="number" step="any" placeholder="Latitud" required style="margin: 5px; padding: 5px;" />
-            <input v-model="newLongitude" type="number" step="any" placeholder="Longitud" required style="margin: 5px; padding: 5px;" />
-            <br>
-            <button type="submit" style="padding: 6px 12px; background: #2b6cb0; color: white; border: none; border-radius: 4px; margin-top: 5px;">
-              {{ editingId ? 'Actualizar Registro' : 'Guardar Registro' }}
-            </button>
-            <button v-if="editingId" @click="cancelEdit" type="button" style="padding: 6px 12px; background: #718096; color: white; border: none; border-radius: 4px; margin-top: 5px; margin-left: 5px;">
-              Cancelar
-            </button>
-          </form>
-          <p v-if="successMessage" style="color: green; font-weight: bold; margin-top: 5px;">{{ successMessage }}</p>
+
+      <div>
+        <div v-if="isLoggedIn" style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 6px 12px; border-radius: 20px; font-weight: 600;">
+            🟢 Admin Activo
+          </span>
+          <button @click="handleLogout" style="padding: 7px 14px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+            Cerrar Sesión
+          </button>
         </div>
       </div>
+    </header>
+
+    <!-- Notificación Flotante de Feedback -->
+    <div v-if="feedback.message" :style="{ background: feedback.type === 'error' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)', color: feedback.type === 'error' ? '#f87171' : '#34d399', border: '1px solid currentColor' }" style="padding: 12px 18px; border-radius: 10px; margin-bottom: 24px; font-weight: 500; font-size: 0.95rem;">
+      {{ feedback.message }}
     </div>
 
-    <!-- Listado de Refugios -->
-    <h2>Refugios y Picos Disponibles</h2>
-    <ul style="list-style-type: none; padding: 0;">
-      <li v-for="shelter in shelters" :key="shelter.id" style="background: #fff; border: 1px solid #cbd5e0; padding: 10px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <strong>{{ shelter.name }}</strong> ({{ shelter.type }}) - {{ shelter.region }} [{{ shelter.elevation }}m]
-        </div>
-        <!-- Botones de administración (solo visibles si está logueado) -->
-        <div v-if="loggedIn">
-          <button @click="startEdit(shelter)" style="background: #d69e2e; color: white; border: none; padding: 4px 8px; border-radius: 4px; margin-right: 5px; cursor: pointer;">Editar</button>
-          <button @click="handleDelete(shelter.id)" style="background: #e53e3e; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Eliminar</button>
-        </div>
-      </li>
-    </ul>
+    <!-- Si no está logueado, mostramos el Login elegante -->
+    <div v-if="!isLoggedIn" style="margin: 40px 0;">
+      <LoginModal @login-success="isLoggedIn = true; showFeedback('¡Bienvenido, Administrador!')" />
+    </div>
+
+    <!-- Si está logueado, mostramos panel de administración (Formulario de crear/editar) -->
+    <div v-else>
+      <ShelterForm :shelterToEdit="shelterToEdit" @save="handleSaveShelter" @cancel="shelterToEdit = null" />
+    </div>
+
+    <!-- Listado principal -->
+    <main style="margin-top: 30px;">
+      <ShelterList :shelters="shelters" :isAdmin="isLoggedIn" @edit="(s) => shelterToEdit = s" @delete="handleDeleteShelter" />
+    </main>
   </div>
 </template>

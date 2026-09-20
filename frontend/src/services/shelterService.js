@@ -1,26 +1,46 @@
-// src/services/shelterService.js
-import axios from 'axios';
-
 const API_URL = 'http://localhost:8080/api/v1/shelters';
 
-export default {
-    // Obtener todos o filtrar por región y/o tipo
-    getShelters(params = {}) {
-        return axios.get(API_URL, { params });
+export const shelterService = {
+    async getAll() {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error('Error al cargar los refugios');
+        return res.json();
     },
 
-    // Crear un nuevo refugio o pico
-    createShelter(shelterData) {
-        return axios.post(API_URL, shelterData);
+    async create(shelterData, token) {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(shelterData)
+        });
+        if (!res.ok) throw new Error('Error al crear el registro');
+        return res.json();
     },
 
-    // Actualizar un registro existente
-    updateShelter(id, shelterData) {
-        return axios.put(`${API_URL}/${id}`, shelterData);
+    async update(id, shelterData, token) {
+        const res = await fetch(`${API_URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(shelterData)
+        });
+        if (!res.ok) throw new Error('Error al actualizar el registro');
+        return res.json();
     },
 
-    // Eliminar un registro
-    deleteShelter(id) {
-        return axios.delete(`${API_URL}/${id}`);
+    async delete(id, token) {
+        const res = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!res.ok) throw new Error('Error al eliminar el registro');
+        return true;
     }
 };
