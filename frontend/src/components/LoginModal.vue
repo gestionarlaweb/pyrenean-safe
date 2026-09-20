@@ -34,7 +34,7 @@ const handleLogin = async () => {
       </div>
       <div>
         <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 6px;">Contraseña</label>
-        <input v-model="password" type="password" placeholder="••••••••" required style="width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; outline: none; transition: border-color 0.2s;" />
+        <input v-model="password" type="password" placeholder="admin123" required style="width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: white; outline: none; transition: border-color 0.2s;" />
       </div>
       <button type="submit" :disabled="loading" style="padding: 11px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;">
         {{ loading ? 'Autenticando...' : 'Iniciar Sesión' }}
