@@ -93,4 +93,49 @@ Desarrollado por David (gestionarlaweb@gmail.com).
 
 ![Pyrenean Safe Interface](assets/screenshot.png)
 
-> **"NOTA: Por favor, sed respetuosos con el backend y no lo saturemos, así todos los usuarios podréis probarlo. ¡Muchas gracias!" 🙏
+## 🚀 Despliegue en Producción (Docker Compose)
+
+Este proyecto está preparado para desplegarse mediante contenedores Docker en entornos cloud (como AWS), utilizando una red interna de puente (`pyrenean-net`).
+
+### Arquitectura de Contenedores
+1. **Base de Datos (`postgres-db`)**: PostgreSQL 16 con persistencia de datos mediante volúmenes Docker.
+2. **Backend (`backend`)**: Spring Boot (Java 21) expuesto internamente en el puerto `8080`.
+3. **Frontend (`frontend`)**: Aplicación Vue.js compilada y servida mediante **Nginx** en el puerto `80`.
+
+### ⚙️ Consideraciones clave de configuración
+
+**Proxy Inverso en Nginx (`nginx.conf`)**:
+  Para evitar problemas de CORS y llamadas a `localhost` desde el navegador del cliente, el contenedor de Nginx actúa como proxy inverso. Las peticiones dirigidas a `/api` se redirigen automáticamente por la red interna de Docker hacia el backend:
+  ```nginx
+  location /api {
+      proxy_pass http://backend:8080;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
+  }
+  ```
+  Rutas Relativas en el Frontend:
+Los servicios de Axios (authService.js, shelterService.js) deben utilizar rutas relativas (/api/...) en lugar de URLs absolutas con localhost, permitiendo que Nginx gestione el enrutamiento en producción:
+
+```
+   const API_URL = '/api/v1/auth'; 
+```
+
+🛠️ Comandos de Despliegue
+Para levantar todo el entorno completo por primera vez o aplicar cambios:
+
+``` 
+   docker compose up -d --build 
+```
+
+Para comprobar el estado de los servicios:
+
+``` 
+   docker compose ps 
+```
+
+
+
+> ## "NOTA: Por favor, sed respetuosos con el backend y no lo saturemos, así todos los usuarios podréis probarlo. ¡Muchas gracias!" 🙏
