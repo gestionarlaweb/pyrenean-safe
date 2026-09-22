@@ -77,17 +77,6 @@ Abre una nueva terminal, navega hasta la carpeta del frontend, instala las depen
 
 (El frontend estará disponible en http://localhost:5173).
 
-## 🔑 Credenciales de Acceso (Administrador)
-Para probar las funciones protegidas de administración (Crear, Editar, Eliminar) desde la interfaz web, utiliza las siguientes credenciales de prueba que se muestran en el panel de acceso:
-
-    Usuario: admin
-
-    Contraseña: admin123
-
-NOTA: No me peteis el backend, ser respectuosos para que otros usuarios puedan probar, gracias !!!
-
-## 👤 Autor
-Desarrollado por David (gestionarlaweb@gmail.com).
 
 ## 📸 Vista Previa de la Aplicación
 
@@ -136,6 +125,5 @@ Para comprobar el estado de los servicios:
    docker compose ps 
 ```
 
-
-
-> ## "NOTA: Por favor, sed respetuosos con el backend y no lo saturemos, así todos los usuarios podréis probarlo. ¡Muchas gracias!" 🙏
+## 👤 Autor
+Desarrollado por David (gestionarlaweb@gmail.com).
