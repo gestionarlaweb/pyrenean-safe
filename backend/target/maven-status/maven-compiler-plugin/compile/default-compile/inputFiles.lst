@@ -3,6 +3,7 @@
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/config/DataInitializer.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/config/JwtAuthenticationFilter.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/config/SecurityConfig.java
+/home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/config/WebConfig.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/controller/AuthController.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/controller/PeakShelterController.java
 /home/david/IdeaProjects/pyrenean-safe/backend/src/main/java/com/simplecraft/pyreneansafe/dto/AuthenticationRequest.java

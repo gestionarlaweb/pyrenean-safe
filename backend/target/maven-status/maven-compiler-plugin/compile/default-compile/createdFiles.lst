@@ -10,6 +10,7 @@ com/simplecraft/pyreneansafe/repository/PeakShelterRepository.class
 com/simplecraft/pyreneansafe/model/User$UserBuilder.class
 com/simplecraft/pyreneansafe/dto/RegisterRequest.class
 com/simplecraft/pyreneansafe/config/SecurityConfig.class
+com/simplecraft/pyreneansafe/config/WebConfig.class
 com/simplecraft/pyreneansafe/exception/GlobalExceptionHandler.class
 com/simplecraft/pyreneansafe/dto/AuthenticationResponse.class
 com/simplecraft/pyreneansafe/config/JwtAuthenticationFilter.class
