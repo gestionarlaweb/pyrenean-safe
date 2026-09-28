@@ -125,5 +125,8 @@ Para comprobar el estado de los servicios:
    docker compose ps 
 ```
 
+> **⚠️ Nota de Arquitectura (Endpoints unificados):**
+> Todo el catálogo de montañas y refugios comparte la misma tabla y entidad en el backend (por eso la clase se llama `PeakShelter`) y se sirve a través de una única ruta común: `/api/v1/shelters`. El filtrado entre picos y refugios se gestiona mediante el campo `type` dentro del modelo.
+
 ## 👤 Autor
 Desarrollado por David (gestionarlaweb@gmail.com).
